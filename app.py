@@ -32,14 +32,16 @@ def index():
     quyu = None
     mesaj = None
     
+    conn = get_db()
+    tum_quyular = conn.execute('SELECT * FROM quyular ORDER BY quyu_no ASC').fetchall()
+    
     if query:
-        conn = get_db()
         quyu = conn.execute('SELECT * FROM quyular WHERE quyu_no = ?', (query,)).fetchone()
-        conn.close()
         if not quyu:
             mesaj = "Bu nömrəli quyu tapılmadı."
-            
-    return render_template('index.html', quyu=quyu, query=query, mesaj=mesaj)
+    
+    conn.close()
+    return render_template('index.html', quyu=quyu, query=query, mesaj=mesaj, tum_quyular=tum_quyular)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
