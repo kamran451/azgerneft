@@ -5,7 +5,7 @@ from flask import Flask, render_template, request, redirect, url_for, session
 app = Flask(__name__)
 app.secret_key = 'azgerneft_xususi_gizli_acar_2026'
 
-# Yeni Admin Şifrəsi
+# Sizin təyin etdiyiniz admin şifrəsi
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', '5847039k')
 
 def get_db():
@@ -36,7 +36,7 @@ def index():
     if query:
         quyular = conn.execute('SELECT * FROM quyular WHERE quyu_no LIKE ? ORDER BY quyu_no ASC', (f'%{query}%',)).fetchall()
     else:
-        # Ana səhifə açılan kimi BÜTÜN QUYULAR gəlir
+        # Səhifə açılan kimi BÜTÜN QUYULAR avtomatik gəlir
         quyular = conn.execute('SELECT * FROM quyular ORDER BY quyu_no ASC').fetchall()
     conn.close()
             
