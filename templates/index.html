@@ -3,45 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quyu Naviqasiyası - Azgerneft</title>
+    <title>AZGERNEFT - Quyu Naviqasiyası</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #eef2f5; margin: 0; padding: 20px; text-align: center; }
-        .box { max-width: 450px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        input[type="text"] { width: 80%; padding: 12px; font-size: 16px; border: 2px solid #007bff; border-radius: 8px; margin-bottom: 10px; }
-        .btn { padding: 12px 20px; font-size: 16px; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-block; font-weight: bold; }
-        .btn-blue { background: #007bff; color: white; width: 85%; }
-        .btn-green { background: #28a745; color: white; width: 100%; margin-top: 10px; }
-        .result-card { background: #f8f9fa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: left; }
-        .admin-link { display: block; margin-top: 20px; color: #6c757d; font-size: 14px; text-decoration: none; }
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --accent: #f59e0b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --btn-green: #10b981;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 550px;
+        }
+        .header {
+            text-align: center;
+            padding: 15px 0;
+            border-bottom: 2px solid #334155;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: var(--accent);
+            letter-spacing: 1px;
+        }
+        .header p {
+            margin: 5px 0 0 0;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background: #1e293b;
+            color: white;
+            font-size: 16px;
+            outline: none;
+        }
+        .search-box input:focus {
+            border-color: var(--accent);
+        }
+        .search-box button {
+            padding: 12px 18px;
+            border: none;
+            background: var(--accent);
+            color: #000;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        .count-badge {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+            display: block;
+        }
+        .well-card {
+            background: var(--card-bg);
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+        .well-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .well-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        .well-coords {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+        .well-note {
+            font-size: 13px;
+            color: #cbd5e1;
+            background: #0f172a;
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+        .btn-nav {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            background: var(--btn-green);
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 6px;
+            box-sizing: border-box;
+            transition: 0.2s;
+        }
+        .btn-nav:hover {
+            opacity: 0.9;
+        }
+        .footer-link {
+            text-align: center;
+            margin-top: 25px;
+        }
+        .footer-link a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2>🛢️ Azgerneft Quyu Axtarışı</h2>
-        <form method="GET" action="/">
-            <input type="text" name="query" value="{{ query }}" placeholder="Quyu nömrəsini daxil edin..." required>
-            <br>
-            <button type="submit" class="btn btn-blue">🔍 Axtar</button>
+    <div class="container">
+        <div class="header">
+            <h1>🛢️ AZGERNEFT</h1>
+            <p>Quyu Koordinat və Naviqasiya Sistemi</p>
+        </div>
+
+        <form method="GET" action="/" class="search-box">
+            <input type="text" name="query" value="{{ query }}" placeholder="Quyu № daxil edin...">
+            <button type="submit">🔍 Axtar</button>
         </form>
 
-        {% if mesaj %}
-            <p style="color: red; margin-top: 15px;">{{ mesaj }}</p>
-        {% endif %}
+        <span class="count-badge">Göstərilən quyu sayısı: {{ quyular|length }}</span>
 
         {% if quyular %}
             {% for quyu in quyular %}
-            <div class="result-card">
-                <h3>📍 Quyu №: {{ quyu.quyu_no }}</h3>
-                <p><strong>Koordinatlar:</strong> {{ quyu.lat }}, {{ quyu.lon }}</p>
+            <div class="well-card">
+                <div class="well-header">
+                    <span class="well-title">📍 Quyu №: {{ quyu.quyu_no }}</span>
+                </div>
+                <div class="well-coords">🗺️ {{ quyu.lat }}, {{ quyu.lon }}</div>
                 {% if quyu.qeyd %}
-                    <p><strong>Qeyd:</strong> {{ quyu.qeyd }}</p>
+                    <div class="well-note">📝 {{ quyu.qeyd }}</div>
                 {% endif %}
-                <a href="https://www.google.com/maps/search/?api=1&query={{ quyu.lat }},{{ quyu.lon }}" target="_blank" class="btn btn-green">🗺️ Google Maps-də Naviqasiyanı Aç</a>
+                <a href="https://www.google.com/maps/search/?api=1&query={{ quyu.lat }},{{ quyu.lon }}" target="_blank" class="btn-nav">🚀 Google Maps-də Naviqasiya Et</a>
             </div>
             {% endfor %}
+        {% else %}
+            <p style="text-align: center; color: var(--text-muted);">Heç bir quyu tapılmadı.</p>
         {% endif %}
 
-        <a href="/login" class="admin-link">⚙️ Admin Girişi</a>
+        <div class="footer-link">
+            <a href="/login">⚙️ Admin Girişi</a>
+        </div>
     </div>
 </body>
 </html>
