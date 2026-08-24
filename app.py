@@ -46,7 +46,7 @@ def index():
 def login():
     if request.method == 'POST':
         password = request.form.get('password')
-        if password == '123':
+        if password == '5847039k':
             session['admin'] = True
             return redirect(url_for('admin'))
         else:
