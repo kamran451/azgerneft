@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeni Quyu Əlavə Et</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-4">
+    <h3 class="text-center mb-4">📍 Yeni Quyu / GPS Qeydiyyatı</h3>
+    
+    <form method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm">
+        <div class="mb-3">
+            <label class="form-label">Quyu Nömrəsi:</label>
+            <input type="text" name="quyu_no" class="form-control" placeholder="Məs: 71mm" required>
+        </div>
+        
+        <div class="row">
+            <div class="col-6 mb-3">
+                <label class="form-label">Mədən:</label>
+                <input type="text" name="meden" class="form-control" placeholder="Məs: 2-ci Mədən">
+            </div>
+            <div class="col-6 mb-3">
+                <label class="form-label">Sahə:</label>
+                <input type="text" name="sahe" class="form-control" placeholder="Məs: 4-cü Sahə">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Yerləşmə Tərifi:</label>
+            <input type="text" name="lokasiya" class="form-control" placeholder="Məs: Stansiyanın arxası, boru xəttinin kəsişməsi">
+        </div>
+
+        <div class="card bg-info-subtle p-3 mb-3">
+            <label class="form-label fw-bold">Dəqiq GPS Koordinatları:</label>
+            <div class="row">
+                <div class="col-6">
+                    <input type="text" id="lat" name="lat" class="form-control" placeholder="Enlik (Lat)" required>
+                </div>
+                <div class="col-6">
+                    <input type="text" id="lon" name="lon" class="form-control" placeholder="Uzunluq (Lon)" required>
+                </div>
+            </div>
+            <button type="button" class="btn btn-dark mt-2" onclick="gpsAl()">🎯 Cari Yerimi (GPS) Avtomatik Təsdiq Et</button>
+            <small id="gpsStatus" class="text-muted mt-1 d-block"></small>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Qısa Texniki Məlumat:</label>
+            <textarea name="melumat" class="form-control" rows="2" placeholder="Plastik boru qutusu, d110 kran..."></textarea>
+        </div>
+
+        <div class="row">
+            <div class="col-6 mb-3">
+                <label class="form-label">Cavabdeh Şəxs:</label>
+                <input type="text" name="cavabdeh_ad" class="form-control" placeholder="Ad Soyad">
+            </div>
+            <div class="col-6 mb-3">
+                <label class="form-label">Əlaqə Nömrəsi:</label>
+                <input type="tel" name="cavabdeh_tel" class="form-control" placeholder="+994...">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Obyektin Şəkli:</label>
+            <input type="file" name="sekil" class="form-control" accept="image/*" capture="environment">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-lg w-100">Yadda Saxla</button>
+        <a href="/" class="btn btn-secondary mt-2 w-100">Geri Qayıt</a>
+    </form>
+</div>
+
+<script>
+function gpsAl() {
+    const status = document.getElementById('gpsStatus');
+    if (!navigator.geolocation) {
+        status.innerText = "Sizin telefon GPS dəstəkləmir.";
+        return;
+    }
+    status.innerText = "GPS siqnalı axtarılır, zəhmət olmasa gözləyin...";
+    navigator.geolocation.getCurrentPosition((position) => {
+        document.getElementById('lat').value = position.coords.latitude;
+        document.getElementById('lon').value = position.coords.longitude;
+        status.innerText = "✅ GPS koordinatları uğurla alındı!";
+    }, () => {
+        status.innerText = "❌ GPS məlumatı almaq olmadı. İcazələri yoxlayın.";
+    }, { enableHighAccuracy: true });
+}
+</script>
+</body>
+</html>
