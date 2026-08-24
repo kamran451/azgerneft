@@ -1,0 +1,8 @@
+{
+  "short_name": "AZGERNEFT",
+  "name": "AZGERNEFT Quyu Naviqasiya",
+  "start_url": "/",
+  "background_color": "#0b131e",
+  "theme_color": "#0b131e",
+  "display": "standalone"
+}
