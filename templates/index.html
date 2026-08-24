@@ -3,172 +3,300 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AZGERNEFT - Quyu Naviqasiyası</title>
+    <title>AZGERNEFT MMC - Quyu Koordinat və Naviqasiya Sistemi</title>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent: #f59e0b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --btn-green: #10b981;
+            --bg-dark: #0b1325;
+            --card-bg: rgba(22, 33, 58, 0.85);
+            --border-color: #1e2d4a;
+            --accent-gold: #d4af37;
+            --btn-blue: #1e5bb8;
+            --btn-blue-hover: #174793;
+            --text-white: #f1f5f9;
+            --text-gray: #94a3b8;
         }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 20%, #152442 0%, #0b1325 70%);
+            color: var(--text-white);
             margin: 0;
             padding: 15px;
+            min-height: 100vh;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
         }
+
         .container {
             width: 100%;
-            max-width: 550px;
+            max-width: 650px;
         }
-        .header {
-            text-align: center;
-            padding: 15px 0;
-            border-bottom: 2px solid #334155;
-            margin-bottom: 20px;
-        }
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-            color: var(--accent);
-            letter-spacing: 1px;
-        }
-        .header p {
-            margin: 5px 0 0 0;
-            color: var(--text-muted);
-            font-size: 13px;
-        }
-        .search-box {
+
+        /* Yuxarı Sağ Admin Button */
+        .top-bar {
+            width: 100%;
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        .search-box input {
-            flex: 1;
-            padding: 12px 15px;
-            border-radius: 8px;
-            border: 1px solid #334155;
-            background: #1e293b;
-            color: white;
-            font-size: 16px;
-            outline: none;
-        }
-        .search-box input:focus {
-            border-color: var(--accent);
-        }
-        .search-box button {
-            padding: 12px 18px;
-            border: none;
-            background: var(--accent);
-            color: #000;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 15px;
-        }
-        .count-badge {
-            font-size: 13px;
-            color: var(--text-muted);
-            margin-bottom: 12px;
-            display: block;
-        }
-        .well-card {
-            background: var(--card-bg);
-            border: 1px solid #334155;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-        }
-        .well-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        .well-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--accent);
-        }
-        .well-coords {
-            font-size: 14px;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-        }
-        .well-note {
-            font-size: 13px;
-            color: #cbd5e1;
-            background: #0f172a;
-            padding: 8px;
-            border-radius: 6px;
+            justify-content: flex-end;
             margin-bottom: 10px;
         }
-        .btn-nav {
-            display: block;
-            width: 100%;
-            text-align: center;
-            padding: 10px 0;
-            background: var(--btn-green);
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
+
+        .admin-btn {
+            background: linear-gradient(135deg, #2b3a55, #182238);
+            color: var(--text-white);
+            border: 1px solid #3b4d6e;
+            padding: 8px 16px;
             border-radius: 6px;
-            box-sizing: border-box;
-            transition: 0.2s;
-        }
-        .btn-nav:hover {
-            opacity: 0.9;
-        }
-        .footer-link {
-            text-align: center;
-            margin-top: 25px;
-        }
-        .footer-link a {
-            color: var(--text-muted);
             text-decoration: none;
             font-size: 13px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+
+        /* Logo və Başlıq */
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .logo-container {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 15px auto;
+            background: #ffffff;
+            border-radius: 50%;
+            padding: 8px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .logo-container svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .company-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            letter-spacing: 1.5px;
+            margin: 0 0 6px 0;
+            text-transform: uppercase;
+        }
+
+        .sub-title {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin: 0;
+            font-weight: 400;
+        }
+
+        /* Axtarış Paneli */
+        .search-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .search-title {
+            text-align: center;
+            font-size: 18px;
+            color: var(--accent-gold);
+            margin: 0 0 15px 0;
+            font-weight: 600;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            background: rgba(11, 19, 37, 0.8);
+            border: 1px solid #2a3c5e;
+            border-radius: 8px;
+            padding: 12px 15px;
+            color: #ffffff;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #d4af37, #aa8522);
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            padding: 0 20px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Quyu Kartları Şəbəkəsi */
+        .wells-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .well-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .well-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-gold);
+        }
+
+        .well-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 10px;
+        }
+
+        .well-icon {
+            color: var(--accent-gold);
+            font-size: 16px;
+        }
+
+        .well-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-white);
+        }
+
+        .well-info {
+            font-size: 13px;
+            color: var(--text-gray);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .well-note {
+            font-size: 12px;
+            color: #e2e8f0;
+            background: rgba(0,0,0,0.3);
+            padding: 6px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .nav-btn {
+            background: var(--btn-blue);
+            color: #ffffff;
+            text-decoration: none;
+            text-align: center;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: var(--btn-blue-hover);
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-gray);
+            padding-bottom: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>🛢️ AZGERNEFT</h1>
-            <p>Quyu Koordinat və Naviqasiya Sistemi</p>
+        <div class="top-bar">
+            <a href="/login" class="admin-btn">🔒 Admin Girişi</a>
         </div>
 
-        <form method="GET" action="/" class="search-box">
-            <input type="text" name="query" value="{{ query }}" placeholder="Quyu № daxil edin...">
-            <button type="submit">🔍 Axtar</button>
-        </form>
+        <div class="header">
+            <div class="logo-container">
+                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 50 130 C 60 70, 100 30, 130 30 C 110 60, 100 90, 90 140 Z" fill="#0080FF" />
+                    <path d="M 80 145 C 90 85, 130 40, 155 45 C 135 75, 120 110, 115 155 Z" fill="#E52B50" />
+                    <path d="M 105 160 C 115 100, 150 60, 175 70 C 150 100, 135 135, 130 170 Z" fill="#00A859" />
+                    <polygon points="60,165 85,105 100,105 125,165 110,165 92.5,120 75,165" fill="#222222"/>
+                    <rect x="50" y="100" width="80" height="10" transform="rotate(-15 90 105)" fill="#222222"/>
+                </svg>
+            </div>
+            <h1 class="company-title">AZGERNEFT MMC</h1>
+            <p class="sub-title">Quyu Koordinat və Naviqasiya Sistemi</p>
+        </div>
 
-        <span class="count-badge">Göstərilən quyu sayısı: {{ quyular|length }}</span>
+        <div class="search-card">
+            <h2 class="search-title">Quyu Naviqasiyası</h2>
+            <form method="GET" action="/" class="search-box">
+                <input type="text" name="query" value="{{ query }}" class="search-input" placeholder="Quyu nömrəsini yazın..." autofocus>
+                <button type="submit" class="search-btn">🔍 Axtar</button>
+            </form>
+        </div>
 
         {% if quyular %}
-            {% for quyu in quyular %}
+        <div class="wells-grid">
+            {% for q in quyular %}
             <div class="well-card">
-                <div class="well-header">
-                    <span class="well-title">📍 Quyu №: {{ quyu.quyu_no }}</span>
+                <div>
+                    <div class="well-header">
+                        <span class="well-icon">📍</span>
+                        <span class="well-name">Quyu №{{ q.quyu_no }}</span>
+                    </div>
+                    <div class="well-info">
+                        <strong>Koordinatlar:</strong><br>
+                        {{ q.lat }}, {{ q.lon }}
+                    </div>
+                    {% if q.qeyd %}
+                    <div class="well-note">
+                        📝 {{ q.qeyd }}
+                    </div>
+                    {% endif %}
                 </div>
-                <div class="well-coords">🗺️ {{ quyu.lat }}, {{ quyu.lon }}</div>
-                {% if quyu.qeyd %}
-                    <div class="well-note">📝 {{ quyu.qeyd }}</div>
-                {% endif %}
-                <a href="https://www.google.com/maps/search/?api=1&query={{ quyu.lat }},{{ quyu.lon }}" target="_blank" class="btn-nav">🚀 Google Maps-də Naviqasiya Et</a>
+                <a href="https://www.google.com/maps/search/?api=1&query={{ q.lat }},{{ q.lon }}" target="_blank" class="nav-btn">
+                    🗺️ Google Maps-də Naviqasiyanı Aç
+                </a>
             </div>
             {% endfor %}
+        </div>
         {% else %}
-            <p style="text-align: center; color: var(--text-muted);">Heç bir quyu tapılmadı.</p>
+        <p style="text-align: center; color: var(--text-gray); margin-top: 30px;">Heç bir quyu tapılmadı.</p>
         {% endif %}
 
-        <div class="footer-link">
-            <a href="/login">⚙️ Admin Girişi</a>
+        <div class="footer">
+            &copy; 2026 AzGerneft MMC. Bütün hüquqlar qorunur.
         </div>
     </div>
 </body>
