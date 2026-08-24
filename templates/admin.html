@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Paneli - Azgerneft</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 15px; }
+        .card { max-width: 700px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .btn { padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; border: none; cursor: pointer; }
+        .btn-green { background: #28a745; color: white; }
+        .btn-blue { background: #007bff; color: white; }
+        .btn-yellow { background: #ffc107; color: #333; }
+        .btn-red { background: #dc3545; color: white; }
+        .btn-gray { background: #6c757d; color: white; }
+        .search-box { display: flex; gap: 8px; margin-bottom: 20px; }
+        .search-box input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; font-size: 14px; }
+        th { background: #f8f9fa; }
+        .actions { display: flex; gap: 6px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="header">
+            <h2>⚙️ Admin Paneli</h2>
+            <div>
+                <a href="{{ url_for('index') }}" class="btn btn-gray">Ana Səhifə</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-red">Çıxış</a>
+            </div>
+        </div>
+
+        <a href="{{ url_for('elave_et') }}" class="btn btn-green" style="display: inline-block; margin-bottom: 15px;">➕ Yeni Quyu Əlavə Et</a>
+
+        <form method="GET" action="{{ url_for('admin') }}" class="search-box">
+            <input type="text" name="axtaris" value="{{ axtaris }}" placeholder="Siyahıda quyu nömrəsi axtar...">
+            <button type="submit" class="btn btn-blue">Axtar</button>
+        </form>
+
+        <h3>Bütün Quyular ({{ quyular|length }})</h3>
+        {% if quyular %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Quyu №</th>
+                    <th>Koordinatlar (Lat, Lon)</th>
+                    <th>Əməliyyatlar</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for q in quyular %}
+                <tr>
+                    <td><strong>{{ q.quyu_no }}</strong><br><small>{{ q.qeyd or '' }}</small></td>
+                    <td>{{ q.lat }}, {{ q.lon }}</td>
+                    <td class="actions">
+                        <a href="{{ url_for('duzelis', id=q.id) }}" class="btn btn-yellow">✏️</a>
+                        <form method="POST" action="{{ url_for('sil', id=q.id) }}" onsubmit="return confirm('Bu quyunu silməyə əminsiniz?');" style="margin:0;">
+                            <button type="submit" class="btn btn-red">🗑️</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+            <p>Heç bir quyu tapılmadı.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
