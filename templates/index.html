@@ -7,11 +7,11 @@
     <style>
         :root {
             --bg-dark: #0b1325;
-            --card-bg: rgba(22, 33, 58, 0.85);
+            --card-bg: rgba(22, 33, 58, 0.88);
             --border-color: #1e2d4a;
             --accent-gold: #d4af37;
-            --btn-blue: #1e5bb8;
-            --btn-blue-hover: #174793;
+            --btn-blue: #1b52a7;
+            --btn-blue-hover: #143e80;
             --text-white: #f1f5f9;
             --text-gray: #94a3b8;
         }
@@ -31,15 +31,30 @@
 
         .container {
             width: 100%;
-            max-width: 650px;
+            max-width: 700px;
         }
 
-        /* Yuxarı Sağ Admin Button */
         .top-bar {
             width: 100%;
             display: flex;
-            justify-content: flex-end;
-            margin-bottom: 10px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .offline-status {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid #10b981;
+        }
+
+        .offline-status.offline {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border-color: #ef4444;
         }
 
         .admin-btn {
@@ -57,20 +72,19 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.3);
         }
 
-        /* Logo və Başlıq */
         .header {
             text-align: center;
             margin-bottom: 25px;
         }
 
         .logo-container {
-            width: 110px;
-            height: 110px;
-            margin: 0 auto 15px auto;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 12px auto;
             background: #ffffff;
             border-radius: 50%;
-            padding: 8px;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            padding: 10px;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.25);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -83,22 +97,21 @@
         }
 
         .company-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--accent-gold);
+            font-size: 26px;
+            font-weight: 800;
+            color: #ffffff;
             letter-spacing: 1.5px;
-            margin: 0 0 6px 0;
+            margin: 0 0 4px 0;
             text-transform: uppercase;
         }
 
         .sub-title {
             font-size: 14px;
-            color: var(--text-gray);
+            color: var(--accent-gold);
             margin: 0;
-            font-weight: 400;
+            font-weight: 500;
         }
 
-        /* Axtarış Paneli */
         .search-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -146,23 +159,20 @@
             font-weight: 700;
             font-size: 15px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
 
-        /* Quyu Kartları Şəbəkəsi */
         .wells-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 15px;
+            width: 100%;
         }
 
         .well-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 10px;
-            padding: 15px;
+            padding: 16px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -188,7 +198,7 @@
         }
 
         .well-name {
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 700;
             color: var(--text-white);
         }
@@ -197,14 +207,14 @@
             font-size: 13px;
             color: var(--text-gray);
             margin-bottom: 12px;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .well-note {
             font-size: 12px;
-            color: #e2e8f0;
+            color: #cbd5e1;
             background: rgba(0,0,0,0.3);
-            padding: 6px;
+            padding: 6px 8px;
             border-radius: 4px;
             margin-bottom: 12px;
         }
@@ -241,17 +251,21 @@
 <body>
     <div class="container">
         <div class="top-bar">
+            <span id="network-status" class="offline-status">🟢 Onlayn Rejim</span>
             <a href="/login" class="admin-btn">🔒 Admin Girişi</a>
         </div>
 
         <div class="header">
             <div class="logo-container">
-                <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M 50 130 C 60 70, 100 30, 130 30 C 110 60, 100 90, 90 140 Z" fill="#0080FF" />
-                    <path d="M 80 145 C 90 85, 130 40, 155 45 C 135 75, 120 110, 115 155 Z" fill="#E52B50" />
-                    <path d="M 105 160 C 115 100, 150 60, 175 70 C 150 100, 135 135, 130 170 Z" fill="#00A859" />
-                    <polygon points="60,165 85,105 100,105 125,165 110,165 92.5,120 75,165" fill="#222222"/>
-                    <rect x="50" y="100" width="80" height="10" transform="rotate(-15 90 105)" fill="#222222"/>
+                <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 120,40 C 160,30 200,60 200,100 C 170,80 150,90 135,115 C 150,85 130,55 120,40 Z" fill="#0088CE"/>
+                    <path d="M 115,100 C 145,70 185,80 205,120 C 175,110 150,130 135,160 C 150,125 125,110 115,100 Z" fill="#E30613"/>
+                    <path d="M 130,120 C 180,90 240,110 245,180 C 220,130 170,140 145,210 C 170,160 145,130 130,120 Z" fill="#009640"/>
+                    <g fill="#231F20">
+                        <polygon points="170,145 155,225 175,225 185,175 220,225 240,225 195,160"/>
+                        <rect x="150" y="150" width="90" height="12" transform="rotate(-22 195 156)"/>
+                        <polygon points="180,185 210,185 220,225 190,225"/>
+                    </g>
                 </svg>
             </div>
             <h1 class="company-title">AZGERNEFT MMC</h1>
@@ -261,7 +275,7 @@
         <div class="search-card">
             <h2 class="search-title">Quyu Naviqasiyası</h2>
             <form method="GET" action="/" class="search-box">
-                <input type="text" name="query" value="{{ query }}" class="search-input" placeholder="Quyu nömrəsini yazın..." autofocus>
+                <input type="text" name="query" value="{{ query }}" class="search-input" placeholder="Quyu nömrəsini daxil edin..." autofocus>
                 <button type="submit" class="search-btn">🔍 Axtar</button>
             </form>
         </div>
@@ -285,7 +299,7 @@
                     </div>
                     {% endif %}
                 </div>
-                <a href="https://www.google.com/maps/search/?api=1&query={{ q.lat }},{{ q.lon }}" target="_blank" class="nav-btn">
+                <a href="geo:{{ q.lat }},{{ q.lon }}?q={{ q.lat }},{{ q.lon }}(Quyu+{{ q.quyu_no }})" target="_blank" class="nav-btn">
                     🗺️ Google Maps-də Naviqasiyanı Aç
                 </a>
             </div>
@@ -296,8 +310,29 @@
         {% endif %}
 
         <div class="footer">
-            &copy; 2026 AzGerneft MMC. Bütün hüquqlar qorunur.
+            © 2026 AzGerneft MMC. Bütün hüquqlar qorunur.
         </div>
     </div>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+
+        function updateOnlineStatus() {
+            const status = document.getElementById('network-status');
+            if (navigator.onLine) {
+                status.textContent = '🟢 Onlayn Rejim';
+                status.classList.remove('offline');
+            } else {
+                status.textContent = '🔴 Oflayn Rejim (GPS Aktiv)';
+                status.classList.add('offline');
+            }
+        }
+
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        updateOnlineStatus();
+    </script>
 </body>
 </html>
