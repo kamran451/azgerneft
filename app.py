@@ -1,11 +1,11 @@
 import os
 import sqlite3
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory
 
 app = Flask(__name__)
 app.secret_key = 'azgerneft_xususi_gizli_acar_2026'
 
-# Sizin təyin etdiyiniz admin şifrəsi
+# Admin şifrəniz
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', '5847039k')
 
 def get_db():
@@ -29,6 +29,11 @@ def init_db():
 
 init_db()
 
+# Service Worker faylının xidmət edilməsi (Offline işləmək üçün)
+@app.route('/sw.js')
+def service_worker():
+    return send_from_directory('static', 'sw.js')
+
 @app.route('/')
 def index():
     query = request.args.get('query', '').strip()
@@ -36,11 +41,17 @@ def index():
     if query:
         quyular = conn.execute('SELECT * FROM quyular WHERE quyu_no LIKE ? ORDER BY quyu_no ASC', (f'%{query}%',)).fetchall()
     else:
-        # Səhifə açılan kimi BÜTÜN QUYULAR avtomatik gəlir
         quyular = conn.execute('SELECT * FROM quyular ORDER BY quyu_no ASC').fetchall()
     conn.close()
             
     return render_template('index.html', quyular=quyular, query=query)
+
+@app.route('/api/quyular')
+def api_quyular():
+    conn = get_db()
+    quyular = conn.execute('SELECT * FROM quyular ORDER BY quyu_no ASC').fetchall()
+    conn.close()
+    return jsonify([dict(q) for q in quyular])
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -73,64 +84,47 @@ def admin():
     
     return render_template('admin.html', quyular=quyular, axtaris=axtaris)
 
-@app.route('/elave-et', methods=['GET', 'POST'])
+@app.route('/elave-et', methods=['POST'])
 def elave_et():
     if not session.get('admin'):
         return redirect(url_for('login'))
     
-    xeta = None
-    if request.method == 'POST':
-        quyu_no = request.form.get('quyu_no').strip()
-        lat = request.form.get('lat')
-        lon = request.form.get('lon')
-        qeyd = request.form.get('qeyd')
+    quyu_no = request.form.get('quyu_no').strip()
+    lat = request.form.get('lat')
+    lon = request.form.get('lon')
+    qeyd = request.form.get('qeyd')
+    
+    try:
+        conn = get_db()
+        conn.execute('INSERT INTO quyular (quyu_no, lat, lon, qeyd) VALUES (?, ?, ?, ?)',
+                     (quyu_no, float(lat), float(lon), qeyd))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        pass
         
-        try:
-            conn = get_db()
-            conn.execute('INSERT INTO quyular (quyu_no, lat, lon, qeyd) VALUES (?, ?, ?, ?)',
-                         (quyu_no, float(lat), float(lon), qeyd))
-            conn.commit()
-            conn.close()
-            return redirect(url_for('admin'))
-        except sqlite3.IntegrityError:
-            xeta = f"'{quyu_no}' nömrəli quyu artıq bazada mövcuddur!"
-        except Exception as e:
-            xeta = f"Xəta baş verdi: {e}"
-            
-    return render_template('elave_et.html', xeta=xeta)
+    return redirect(url_for('admin'))
 
-@app.route('/duzelis/<int:id>', methods=['GET', 'POST'])
+@app.route('/duzelis/<int:id>', methods=['POST'])
 def duzelis(id):
     if not session.get('admin'):
         return redirect(url_for('login'))
     
-    conn = get_db()
-    quyu = conn.execute('SELECT * FROM quyular WHERE id = ?', (id,)).fetchone()
+    quyu_no = request.form.get('quyu_no').strip()
+    lat = request.form.get('lat')
+    lon = request.form.get('lon')
+    qeyd = request.form.get('qeyd')
     
-    if not quyu:
+    try:
+        conn = get_db()
+        conn.execute('UPDATE quyular SET quyu_no = ?, lat = ?, lon = ?, qeyd = ? WHERE id = ?',
+                     (quyu_no, float(lat), float(lon), qeyd, id))
+        conn.commit()
         conn.close()
-        return redirect(url_for('admin'))
-        
-    xeta = None
-    if request.method == 'POST':
-        quyu_no = request.form.get('quyu_no').strip()
-        lat = request.form.get('lat')
-        lon = request.form.get('lon')
-        qeyd = request.form.get('qeyd')
-        
-        try:
-            conn.execute('UPDATE quyular SET quyu_no = ?, lat = ?, lon = ?, qeyd = ? WHERE id = ?',
-                         (quyu_no, float(lat), float(lon), qeyd, id))
-            conn.commit()
-            conn.close()
-            return redirect(url_for('admin'))
-        except sqlite3.IntegrityError:
-            xeta = f"'{quyu_no}' nömrəli başqa bir quyu artıq mövcuddur!"
-        except Exception as e:
-            xeta = f"Xəta baş verdi: {e}"
+    except Exception as e:
+        pass
 
-    conn.close()
-    return render_template('duzelis.html', quyu=quyu, xeta=xeta)
+    return redirect(url_for('admin'))
 
 @app.route('/sil/<int:id>', methods=['POST'])
 def sil(id):
