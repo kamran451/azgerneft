@@ -3,70 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Paneli - Azgerneft</title>
+    <title>AzGerneft MMC - Admin İdarəetmə Paneli</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f6f9; margin: 0; padding: 15px; }
-        .card { max-width: 700px; margin: auto; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .btn { padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 14px; border: none; cursor: pointer; }
-        .btn-green { background: #28a745; color: white; }
-        .btn-blue { background: #007bff; color: white; }
-        .btn-yellow { background: #ffc107; color: #333; }
-        .btn-red { background: #dc3545; color: white; }
-        .btn-gray { background: #6c757d; color: white; }
-        .search-box { display: flex; gap: 8px; margin-bottom: 20px; }
-        .search-box input { flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; font-size: 14px; }
-        th { background: #f8f9fa; }
-        .actions { display: flex; gap: 6px; }
+        :root {
+            --bg-dark: #0b1325;
+            --card-bg: #16213a;
+            --border-color: #1e2d4a;
+            --accent-gold: #d4af37;
+            --btn-green: #10b981;
+            --btn-red: #ef4444;
+            --text-white: #f1f5f9;
+            --text-gray: #94a3b8;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .admin-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: var(--accent-gold);
+            font-size: 22px;
+        }
+
+        .btn-logout {
+            background: #ef4444;
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        .card-title {
+            font-size: 16px;
+            color: var(--accent-gold);
+            margin-top: 0;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-bottom: 5px;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            background: rgba(11, 19, 37, 0.8);
+            border: 1px solid #2a3c5e;
+            border-radius: 6px;
+            padding: 10px;
+            color: white;
+            font-size: 14px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--btn-green);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        th {
+            background: #0f182c;
+            color: var(--accent-gold);
+            padding: 12px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+            color: #e2e8f0;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-delete {
+            background: var(--btn-red);
+            color: white;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
-    <div class="card">
+    <div class="admin-container">
         <div class="header">
-            <h2>⚙️ Admin Paneli</h2>
-            <div>
-                <a href="{{ url_for('index') }}" class="btn btn-gray">Ana Səhifə</a>
-                <a href="{{ url_for('logout') }}" class="btn btn-red">Çıxış</a>
-            </div>
+            <h1>⚙️ AZGERNEFT MMC - Admin Panel</h1>
+            <a href="/logout" class="btn-logout">Çıxış Et</a>
         </div>
 
-        <a href="{{ url_for('elave_et') }}" class="btn btn-green" style="display: inline-block; margin-bottom: 15px;">➕ Yeni Quyu Əlavə Et</a>
+        <div class="grid-layout">
+            <div class="card">
+                <h3 class="card-title">➕ Yeni Quyu Əlavə Et</h3>
+                <form action="/elave-et" method="POST">
+                    <div class="form-group">
+                        <label>Quyu №</label>
+                        <input type="text" name="quyu_no" placeholder="Məsələn: 71" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Enlik (Latitude)</label>
+                        <input type="text" name="lat" placeholder="Məsələn: 40.377" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Uzunluq (Longitude)</label>
+                        <input type="text" name="lon" placeholder="Məsələn: 49.892" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Qeyd / Məlumat</label>
+                        <textarea name="qeyd" rows="3" placeholder="Quyu haqqında qeyd..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">Yadda Saxla</button>
+                </form>
+            </div>
 
-        <form method="GET" action="{{ url_for('admin') }}" class="search-box">
-            <input type="text" name="axtaris" value="{{ axtaris }}" placeholder="Siyahıda quyu nömrəsi axtar...">
-            <button type="submit" class="btn btn-blue">Axtar</button>
-        </form>
-
-        <h3>Bütün Quyular ({{ quyular|length }})</h3>
-        {% if quyular %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Quyu №</th>
-                    <th>Koordinatlar (Lat, Lon)</th>
-                    <th>Əməliyyatlar</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for q in quyular %}
-                <tr>
-                    <td><strong>{{ q.quyu_no }}</strong><br><small>{{ q.qeyd or '' }}</small></td>
-                    <td>{{ q.lat }}, {{ q.lon }}</td>
-                    <td class="actions">
-                        <a href="{{ url_for('duzelis', id=q.id) }}" class="btn btn-yellow">✏️</a>
-                        <form method="POST" action="{{ url_for('sil', id=q.id) }}" onsubmit="return confirm('Bu quyunu silməyə əminsiniz?');" style="margin:0;">
-                            <button type="submit" class="btn btn-red">🗑️</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-            <p>Heç bir quyu tapılmadı.</p>
-        {% endif %}
+            <div class="card">
+                <h3 class="card-title">📋 Baza Quyuları ({{ quyular|length }})</h3>
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Quyu №</th>
+                                <th>Koordinat</th>
+                                <th>Qeyd</th>
+                                <th>Əməliyyat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for q in quyular %}
+                            <tr>
+                                <td><strong>№ {{ q.quyu_no }}</strong></td>
+                                <td>{{ q.lat }}, {{ q.lon }}</td>
+                                <td>{{ q.qeyd if q.qeyd else '-' }}</td>
+                                <td>
+                                    <form action="/sil/{{ q.id }}" method="POST" onsubmit="return confirm('Bu quyunu silməyə əminsiniz?');">
+                                        <button type="submit" class="btn-delete">🗑️ Sil</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
