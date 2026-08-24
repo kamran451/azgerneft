@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AZGERNEFT MMC - Quyu Naviqasiyası</title>
-    <link rel="manifest" href="/static/manifest.json">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
         body { background: #0b131e; color: #ffffff; padding-bottom: 30px; }
@@ -20,15 +19,19 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px; }
         .card { background: #131f2e; border: 1px solid #1f2d3d; border-radius: 10px; padding: 16px; }
         .card:hover { border-color: #dfc27c; }
-        .card-title { color: #dfc27c; font-size: 20px; font-weight: bold; margin-bottom: 8px; display: flex; justify-content: space-between; }
+        .card-title { color: #dfc27c; font-size: 20px; font-weight: bold; margin-bottom: 8px; }
         .info-row { font-size: 14px; color: #cbd5e1; margin-bottom: 5px; }
         .info-row strong { color: #94a3b8; }
         
         .btn-map { display: block; width: 100%; text-align: center; background: #2563eb; color: white; text-decoration: none; padding: 12px; border-radius: 6px; font-weight: bold; margin-top: 12px; }
         .btn-call { display: block; width: 100%; text-align: center; background: #16a34a; color: white; text-decoration: none; padding: 10px; border-radius: 6px; font-weight: bold; margin-top: 6px; }
+        
+        .offline-banner { background: #b91c1c; color: white; text-align: center; padding: 8px; font-size: 13px; display: none; }
     </style>
 </head>
 <body>
+
+    <div id="offlineBanner" class="offline-banner">⚠️ İnternet bağlı deyil (Oflayn rejim - Yaddaşdan oxunur)</div>
 
     <div class="header">
         <div class="logo">AZGERNEFT MMC</div>
@@ -41,44 +44,83 @@
         </div>
 
         <div class="grid" id="wellsGrid">
-            {% for well in wells %}
-            <div class="card well-item">
-                <div class="card-title">
-                    <span>📍 Quyu {{ well.quyu_no }}</span>
-                </div>
-                <div class="info-row"><strong>Mədən:</strong> <span class="txt-meden">{{ well.meden or 'Təyin edilməyib' }}</span></div>
-                <div class="info-row"><strong>Sahə:</strong> <span class="txt-sahe">{{ well.sahe or 'Təyin edilməyib' }}</span></div>
-                <div class="info-row"><strong>Koordinatlar:</strong> {{ well.lat }}, {{ well.lon }}</div>
-                {% if well.qeyd %}<div class="info-row"><strong>Qeyd:</strong> {{ well.qeyd }}</div>{% endif %}
-                
-                {% if well.telefon %}
-                    <a href="tel:{{ well.telefon }}" class="btn-call">📞 Zəng et ({{ well.telefon }})</a>
-                {% endif %}
-                <a href="https://www.google.com/maps/search/?api=1&query={{ well.lat }},{{ well.lon }}" target="_blank" class="btn-map">🗺 Naviqasiyanı Aç</a>
-            </div>
-            {% endfor %}
+            <!-- Məlumatlar bura dinamik yüklənəcək -->
         </div>
     </div>
 
     <script>
-        // Oflayn İşləmə Funksionallığı (Service Worker)
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js');
+        // Serverdən gələn məlumatları JavaScript massivi kimi saxlayırıq
+        let wellsData = [
+            {% for well in wells %}
+            {
+                quyu_no: "{{ well.quyu_no }}",
+                lat: "{{ well.lat }}",
+                lon: "{{ well.lon }}",
+                meden: "{{ well.meden or '' }}",
+                sahe: "{{ well.sahe or '' }}",
+                telefon: "{{ well.telefon or '' }}",
+                qeyd: "{{ well.qeyd or '' }}"
+            },
+            {% endfor %}
+        ];
+
+        // Əgər internet varsa, məlumatları telefonun yaddaşına (localStorage) yazırıq
+        if (wellsData.length > 0) {
+            localStorage.setItem('azgerneft_wells', JSON.stringify(wellsData));
         }
 
-        // Anında Axtarış Funksiyası
-        function filterWells() {
-            let input = document.getElementById('searchInput').value.toLowerCase();
-            let items = document.getElementsByClassName('well-item');
-
-            for (let i = 0; i < items.length; i++) {
-                let text = items[i].innerText.toLowerCase();
-                if (text.includes(input)) {
-                    items[i].style.display = "block";
-                } else {
-                    items[i].style.display = "none";
+        // Səhifə yüklənəndə işə düşür
+        window.onload = function() {
+            // İnternet yoxdursa və ya server işləmirsə, localStorage-dən oxuyuruq
+            if (!navigator.onLine) {
+                document.getElementById('offlineBanner').style.display = 'block';
+                let savedWells = localStorage.getItem('azgerneft_wells');
+                if (savedWells) {
+                    wellsData = JSON.parse(savedWells);
                 }
             }
+            renderWells(wellsData);
+        };
+
+        // Quyuları ekrana çəkən funksiya
+        function renderWells(data) {
+            let grid = document.getElementById('wellsGrid');
+            grid.innerHTML = "";
+
+            if (data.length === 0) {
+                grid.innerHTML = "<p style='color: #94a3b8; text-align: center; grid-column: 1/-1;'>Heç bir quyu tapılmadı.</p>";
+                return;
+            }
+
+            data.forEach(well => {
+                let card = document.createElement('div');
+                card.className = 'card well-item';
+                
+                let phoneHtml = well.telefon ? `<a href="tel:${well.telefon}" class="btn-call">📞 Zəng et (${well.telefon})</a>` : '';
+                let qeydHtml = well.qeyd ? `<div class="info-row"><strong>Qeyd:</strong> ${well.qeyd}</div>` : '';
+
+                card.innerHTML = `
+                    <div class="card-title">📍 Quyu ${well.quyu_no}</div>
+                    <div class="info-row"><strong>Mədən:</strong> ${well.meden || 'Təyin edilməyib'}</div>
+                    <div class="info-row"><strong>Sahə:</strong> ${well.sahe || 'Təyin edilməyib'}</div>
+                    <div class="info-row"><strong>Koordinatlar:</strong> ${well.lat}, ${well.lon}</div>
+                    ${qeydHtml}
+                    ${phoneHtml}
+                    <a href="https://www.google.com/maps/search/?api=1&query=${well.lat},${well.lon}" target="_blank" class="btn-map">🗺 Naviqasiyanı Aç</a>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Axtarış funksiyası
+        function filterWells() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let filtered = wellsData.filter(w => 
+                w.quyu_no.toLowerCase().includes(input) || 
+                w.meden.toLowerCase().includes(input) || 
+                w.sahe.toLowerCase().includes(input)
+            );
+            renderWells(filtered);
         }
     </script>
 </body>
