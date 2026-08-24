@@ -3,226 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AzGerneft MMC - Admin İdarəetmə Paneli</title>
+    <title>Admin İdarə Paneli</title>
     <style>
-        :root {
-            --bg-dark: #0b1325;
-            --card-bg: #16213a;
-            --border-color: #1e2d4a;
-            --accent-gold: #d4af37;
-            --btn-green: #10b981;
-            --btn-red: #ef4444;
-            --text-white: #f1f5f9;
-            --text-gray: #94a3b8;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-white);
-            margin: 0;
-            padding: 20px;
-        }
-
-        .admin-container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-        }
-
-        .header h1 {
-            margin: 0;
-            color: var(--accent-gold);
-            font-size: 22px;
-        }
-
-        .btn-logout {
-            background: #ef4444;
-            color: white;
-            text-decoration: none;
-            padding: 8px 15px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .grid-layout {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 768px) {
-            .grid-layout {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        }
-
-        .card-title {
-            font-size: 16px;
-            color: var(--accent-gold);
-            margin-top: 0;
-            margin-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            color: var(--text-gray);
-            margin-bottom: 5px;
-        }
-
-        .form-group input, .form-group textarea {
-            width: 100%;
-            background: rgba(11, 19, 37, 0.8);
-            border: 1px solid #2a3c5e;
-            border-radius: 6px;
-            padding: 10px;
-            color: white;
-            font-size: 14px;
-            box-sizing: border-box;
-            outline: none;
-        }
-
-        .form-group input:focus {
-            border-color: var(--accent-gold);
-        }
-
-        .btn-submit {
-            width: 100%;
-            background: var(--btn-green);
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .table-responsive {
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            font-size: 14px;
-        }
-
-        th {
-            background: #0f182c;
-            color: var(--accent-gold);
-            padding: 12px;
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid var(--border-color);
-            color: #e2e8f0;
-        }
-
-        .action-btns {
-            display: flex;
-            gap: 6px;
-        }
-
-        .btn-delete {
-            background: var(--btn-red);
-            color: white;
-            border: none;
-            padding: 6px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+        body { background: #0b131e; color: white; padding: 15px; }
+        .container { max-width: 900px; margin: auto; }
+        .box { background: #131f2e; padding: 20px; border-radius: 10px; border: 1px solid #dfc27c; margin-bottom: 20px; }
+        h2, h3 { color: #dfc27c; margin-bottom: 12px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+        input { padding: 10px; border-radius: 6px; border: 1px solid #334155; background: #0b131e; color: white; width: 100%; }
+        .btn-gps { background: #eab308; color: black; border: none; padding: 10px; font-weight: bold; border-radius: 6px; cursor: pointer; grid-column: 1 / -1; }
+        .btn-add { background: #22c55e; color: white; border: none; padding: 12px; font-weight: bold; border-radius: 6px; cursor: pointer; grid-column: 1 / -1; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+        th, td { border: 1px solid #334155; padding: 8px; text-align: left; }
+        th { background: #1a293b; color: #dfc27c; }
+        .btn-edit { background: #3b82f6; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; }
+        .btn-del { background: #ef4444; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; }
+        .edit-form { display: none; background: #1a293b; padding: 10px; margin-top: 5px; border-radius: 6px; }
     </style>
 </head>
 <body>
-    <div class="admin-container">
-        <div class="header">
-            <h1>⚙️ AZGERNEFT MMC - Admin Panel</h1>
-            <a href="/logout" class="btn-logout">Çıxış Et</a>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <h2>🛠 Admin İdarə Paneli</h2>
+            <a href="/logout" style="color: #ef4444; text-decoration: none; font-weight: bold;">Çıxış Et</a>
         </div>
 
-        <div class="grid-layout">
-            <div class="card">
-                <h3 class="card-title">➕ Yeni Quyu Əlavə Et</h3>
-                <form action="/elave-et" method="POST">
-                    <div class="form-group">
-                        <label>Quyu №</label>
-                        <input type="text" name="quyu_no" placeholder="Məsələn: 71" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Enlik (Latitude)</label>
-                        <input type="text" name="lat" placeholder="Məsələn: 40.377" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Uzunluq (Longitude)</label>
-                        <input type="text" name="lon" placeholder="Məsələn: 49.892" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Qeyd / Məlumat</label>
-                        <textarea name="qeyd" rows="3" placeholder="Quyu haqqında qeyd..."></textarea>
-                    </div>
-                    <button type="submit" class="btn-submit">Yadda Saxla</button>
-                </form>
-            </div>
+        <!-- YENİ QUYU ƏLAVƏ ET FAYLI -->
+        <div class="box">
+            <h3>Yeni Quyu Əlavə Et</h3>
+            <form action="/elave-et" method="POST" class="form-grid">
+                <input type="text" name="quyu_no" placeholder="Quyu № (Məs: N70)" required>
+                <input type="text" id="lat" name="lat" placeholder="Enlik (Latitude)" required>
+                <input type="text" id="lon" name="lon" placeholder="Uzunluq (Longitude)" required>
+                <input type="text" name="meden" placeholder="Mədən № (Məs: 1-ci mədən)">
+                <input type="text" name="sahe" placeholder="Sahə adı (Məs: Siyəzən)">
+                <input type="text" name="telefon" placeholder="Əlaqə Nömrəsi">
+                <input type="text" name="qeyd" placeholder="Qeyd">
+                
+                <button type="button" class="btn-gps" onclick="getLocation()">🎯 GPS ilə Qunun Yanında Dəqiq Yeri Götür</button>
+                <button type="submit" class="btn-add">➕ Quyunu Yadda Saxla</button>
+            </form>
+        </div>
 
-            <div class="card">
-                <h3 class="card-title">📋 Baza Quyuları ({{ quyular|length }})</h3>
-                <div class="table-responsive">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Quyu №</th>
-                                <th>Koordinat</th>
-                                <th>Qeyd</th>
-                                <th>Əməliyyat</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for q in quyular %}
-                            <tr>
-                                <td><strong>№ {{ q.quyu_no }}</strong></td>
-                                <td>{{ q.lat }}, {{ q.lon }}</td>
-                                <td>{{ q.qeyd if q.qeyd else '-' }}</td>
-                                <td>
-                                    <form action="/sil/{{ q.id }}" method="POST" onsubmit="return confirm('Bu quyunu silməyə əminsiniz?');">
-                                        <button type="submit" class="btn-delete">🗑️ Sil</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+        <!-- MÖVCUD QUYULAR VƏ REDAKTƏ -->
+        <div class="box">
+            <h3>Mövcud Quyular və İdarəetmə</h3>
+            <div style="overflow-x: auto;">
+                <table>
+                    <tr>
+                        <th>Quyu №</th>
+                        <th>Mədən / Sahə</th>
+                        <th>Koordinatlar</th>
+                        <th>Əlaqə</th>
+                        <th>Əməliyyat</th>
+                    </tr>
+                    {% for well in wells %}
+                    <tr>
+                        <td><b>{{ well.quyu_no }}</b></td>
+                        <td>{{ well.meden }}<br><small>{{ well.sahe }}</small></td>
+                        <td>{{ well.lat }}, {{ well.lon }}</td>
+                        <td>{{ well.telefon }}</td>
+                        <td>
+                            <button class="btn-edit" onclick="toggleEdit('{{ well.id }}')">✏ Redaktə</button>
+                            <form action="/sil/{{ well.id }}" method="POST" style="display:inline;" onsubmit="return confirm('Silməyə əminsiniz?')">
+                                <button class="btn-del" type="submit">🗑 Sil</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <!-- REDAKTƏ FORMASI (GİZLİ) -->
+                    <tr id="edit-row-{{ well.id }}" class="edit-form">
+                        <td colspan="5">
+                            <form action="/redakte/{{ well.id }}" method="POST" class="form-grid">
+                                <input type="text" name="quyu_no" value="{{ well.quyu_no }}" required>
+                                <input type="text" name="lat" value="{{ well.lat }}" required>
+                                <input type="text" name="lon" value="{{ well.lon }}" required>
+                                <input type="text" name="meden" value="{{ well.meden }}">
+                                <input type="text" name="sahe" value="{{ well.sahe }}">
+                                <input type="text" name="telefon" value="{{ well.telefon }}">
+                                <input type="text" name="qeyd" value="{{ well.qeyd }}">
+                                <button type="submit" class="btn-add" style="background: #3b82f6;">Yenilə / Yadda Saxla</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
             </div>
         </div>
     </div>
+
+    <script>
+        // GPS koordinatlarını götürmək üçün funksiya
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    document.getElementById('lat').value = position.coords.latitude;
+                    document.getElementById('lon').value = position.coords.longitude;
+                    alert("Koordinatlar dəqiqliklə götürüldü!");
+                }, function(error) {
+                    alert("GPS məlumatı alına bilmədi. Xahiş olunur məkan icazəsini aktiv edin.");
+                }, { enableHighAccuracy: true });
+            } else {
+                alert("Brauzeriniz GPS funksiyasını dəstəkləmir.");
+            }
+        }
+
+        // Redaktə formasını açmaq/bağlamaq
+        function toggleEdit(id) {
+            var row = document.getElementById('edit-row-' + id);
+            if (row.style.display === 'table-row') {
+                row.style.display = 'none';
+            } else {
+                row.style.display = 'table-row';
+            }
+        }
+    </script>
 </body>
 </html>
