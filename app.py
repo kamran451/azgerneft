@@ -29,17 +29,18 @@ init_db()
 @app.route('/')
 def index():
     query = request.args.get('query', '').strip()
-    quyu = None
+    quyular = []
     mesaj = None
     
     if query:
         conn = get_db()
-        quyu = conn.execute('SELECT * FROM quyular WHERE quyu_no = ?', (query,)).fetchone()
+        # DƏQİQLƏŞDİRİLMİŞ AXTARIŞ: İçində yazılan rəqəm/mətn keçən bütün quyuları tapır
+        quyular = conn.execute('SELECT * FROM quyular WHERE quyu_no LIKE ?', (f'%{query}%',)).fetchall()
         conn.close()
-        if not quyu:
-            mesaj = "Bu nömrəli quyu tapılmadı."
+        if not quyular:
+            mesaj = f"'{query}' nömrəli quyu tapılmadı."
             
-    return render_template('index.html', quyu=quyu, query=query, mesaj=mesaj)
+    return render_template('index.html', quyular=quyular, query=query, mesaj=mesaj)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
