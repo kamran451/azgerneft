@@ -3,782 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>AZGERNEEFT MMC - Quyu Naviqasiyası</title>
-
+    <title>AZGERNEFT MMC - Quyu Naviqasiyası</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
             --bg: #0b1524;
-            --bg2: #111d2d;
-            --panel: #202d3d;
-            --panel-light: #263547;
             --gold: #dfc27c;
             --gold-light: #f0d48d;
-            --blue: #1264a0;
-            --blue-light: #1e78b5;
             --text: #edf0f2;
-            --muted: #c8ced5;
-            --border: rgba(255,255,255,.10);
         }
-
         body {
             min-height: 100vh;
             color: var(--text);
             font-family: "Inter", Arial, sans-serif;
-
-            background:
-                radial-gradient(
-                    circle at 50% 55%,
-                    rgba(36, 82, 111, .22),
-                    transparent 34%
-                ),
-                linear-gradient(
-                    135deg,
-                    #0c1725 0%,
-                    #101b2b 48%,
-                    #0b1524 100%
-                );
-
-            position: relative;
-            overflow-x: hidden;
+            background: linear-gradient(135deg, #0c1725 0%, #101b2b 48%, #0b1524 100%);
         }
-
-        /* Decorative background */
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            opacity: .18;
-
-            background-image:
-                linear-gradient(
-                    150deg,
-                    transparent 48%,
-                    rgba(90, 116, 141, .25) 49%,
-                    transparent 50%
-                ),
-                linear-gradient(
-                    30deg,
-                    transparent 48%,
-                    rgba(90, 116, 141, .18) 49%,
-                    transparent 50%
-                );
-
-            background-size: 170px 170px;
-        }
-
-        /* Top bar */
         .topbar {
             height: 51px;
             border-bottom: 1px solid rgba(255,255,255,.09);
-
             background: rgba(18, 29, 44, .94);
-
             display: flex;
             align-items: center;
             justify-content: flex-end;
-
             padding: 0 22px;
             gap: 24px;
-
-            position: relative;
-            z-index: 5;
         }
-
         .nav-link {
             color: #d9d1bd;
             text-decoration: none;
             font-size: 14px;
             font-weight: 500;
-
             display: flex;
             align-items: center;
             gap: 7px;
-
-            transition: .2s;
         }
+        .nav-icon { color: var(--gold); }
+        .container { width: min(1120px, calc(100% - 30px)); margin: auto; }
+        .hero { text-align: center; padding-top: 25px; }
+        .hero-title { font-family: "Playfair Display", Georgia, serif; font-size: 36px; color: var(--gold-light); }
+        .hero-subtitle { font-family: "Playfair Display", Georgia, serif; font-size: 18px; color: #e7d6ac; margin-top: 5px; }
 
-        .nav-link:hover {
-            color: white;
-        }
-
-        .nav-icon {
-            color: var(--gold);
-            font-size: 16px;
-        }
-
-        /* Main */
-        .container {
-            width: min(1120px, calc(100% - 30px));
-            margin: auto;
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Header / logo */
-        .hero {
-            text-align: center;
-            padding-top: 2px;
-        }
-
-        .logo {
-            width: 150px;
-            height: 170px;
-            margin: 0 auto 0;
-
-            position: relative;
-        }
-
-        .logo-oil {
-            position: absolute;
-            left: 48px;
-            top: 18px;
-
-            width: 67px;
-            height: 110px;
-
-            transform: rotate(24deg);
-
-            background: linear-gradient(
-                90deg,
-                #00a9e0,
-                #0787c0
-            );
-
-            clip-path: polygon(
-                50% 0,
-                85% 20%,
-                73% 45%,
-                51% 65%,
-                22% 100%,
-                25% 60%,
-                5% 48%,
-                27% 28%
-            );
-        }
-
-        .logo-red {
-            position: absolute;
-            left: 67px;
-            top: 17px;
-
-            width: 47px;
-            height: 115px;
-
-            transform: rotate(21deg);
-
-            background: #ed1d2e;
-
-            clip-path: polygon(
-                48% 0,
-                82% 20%,
-                75% 48%,
-                53% 64%,
-                15% 100%,
-                19% 59%,
-                0 47%,
-                28% 25%
-            );
-        }
-
-        .logo-green {
-            position: absolute;
-            left: 76px;
-            top: 29px;
-
-            width: 88px;
-            height: 118px;
-
-            background: linear-gradient(
-                135deg,
-                #16b759,
-                #008b42
-            );
-
-            clip-path: polygon(
-                34% 0,
-                62% 18%,
-                83% 44%,
-                91% 76%,
-                73% 74%,
-                61% 100%,
-                50% 73%,
-                31% 69%,
-                12% 54%,
-                17% 28%
-            );
-        }
-
-        /* Oil rig */
-        .rig {
-            position: absolute;
-            width: 108px;
-            height: 88px;
-
-            left: 45px;
-            top: 73px;
-
-            transform: rotate(10deg);
-        }
-
-        .rig-line {
-            position: absolute;
-            height: 3px;
-            background: #aeb0ac;
-            border-radius: 2px;
-            box-shadow: 0 1px 2px #000;
-        }
-
-        .rig-main {
-            left: 28px;
-            top: 7px;
-            width: 72px;
-            transform: rotate(7deg);
-        }
-
-        .rig-base-left {
-            left: 29px;
-            top: 19px;
-            width: 3px;
-            height: 67px;
-            transform: rotate(20deg);
-        }
-
-        .rig-base-right {
-            left: 72px;
-            top: 17px;
-            width: 3px;
-            height: 67px;
-            transform: rotate(-20deg);
-        }
-
-        .rig-cross-1 {
-            left: 37px;
-            top: 37px;
-            width: 45px;
-            transform: rotate(28deg);
-        }
-
-        .rig-cross-2 {
-            left: 37px;
-            top: 37px;
-            width: 45px;
-            transform: rotate(-28deg);
-        }
-
-        .rig-cross-3 {
-            left: 42px;
-            top: 58px;
-            width: 39px;
-            transform: rotate(26deg);
-        }
-
-        .rig-cross-4 {
-            left: 42px;
-            top: 58px;
-            width: 39px;
-            transform: rotate(-26deg);
-        }
-
-        .hero-title {
-            margin-top: 0;
-
-            font-family: "Playfair Display", Georgia, serif;
-            font-size: 39px;
-            line-height: 1.1;
-
-            color: var(--gold-light);
-
-            text-shadow:
-                0 2px 3px #000,
-                0 0 15px rgba(220,185,104,.12);
-        }
-
-        .hero-subtitle {
-            margin-top: 5px;
-
-            font-family: "Playfair Display", Georgia, serif;
-            font-size: 22px;
-            color: #e7d6ac;
-        }
-
-        /* Search */
         .search-box {
             width: min(680px, 100%);
-            margin: 43px auto 42px;
-
-            background: linear-gradient(
-                145deg,
-                #273546,
-                #1c2a3a
-            );
-
+            margin: 30px auto;
+            background: #1c2a3a;
             border: 1px solid rgba(255,255,255,.08);
             border-radius: 11px;
-
             padding: 20px;
-
-            box-shadow:
-                0 18px 35px rgba(0,0,0,.34),
-                inset 0 1px rgba(255,255,255,.04);
         }
+        .search-title { text-align: center; color: var(--gold-light); font-family: "Playfair Display", Georgia, serif; font-size: 26px; margin-bottom: 15px; }
+        .search-form { display: flex; width: 100%; }
+        .search-input { height: 42px; flex: 1; border: 1px solid #c6ad70; border-right: none; background: #1a2635; color: white; padding: 0 13px; border-radius: 7px 0 0 7px; outline: none; }
+        .search-button { height: 42px; border: 1px solid #c6ad70; background: linear-gradient(180deg, #e5ca84, #caa65b); color: #26303c; font-weight: 700; padding: 0 20px; border-radius: 0 7px 7px 0; cursor: pointer; }
 
-        .search-title {
-            text-align: center;
-
-            color: var(--gold-light);
-
-            font-family: "Playfair Display", Georgia, serif;
-            font-size: 31px;
-            margin-bottom: 17px;
-        }
-
-        .search-form {
-            display: flex;
-            width: 100%;
-        }
-
-        .search-input {
-            height: 39px;
-            flex: 1;
-
-            border: 1px solid #c6ad70;
-            border-right: none;
-
-            background: #1a2635;
-            color: white;
-
-            padding: 0 13px;
-
-            border-radius: 7px 0 0 7px;
-
-            outline: none;
-            font-size: 15px;
-        }
-
-        .search-input:focus {
-            box-shadow: 0 0 0 2px rgba(222,194,124,.12);
-        }
-
-        .search-button {
-            height: 39px;
-
-            border: 1px solid #c6ad70;
-
-            background: linear-gradient(
-                180deg,
-                #e5ca84,
-                #caa65b
-            );
-
-            color: #26303c;
-
-            font-weight: 700;
-            font-size: 14px;
-
-            padding: 0 20px;
-
-            border-radius: 0 7px 7px 0;
-
-            cursor: pointer;
-
-            transition: .2s;
-        }
-
-        .search-button:hover {
-            filter: brightness(1.08);
-        }
-
-        /* Cards */
-        .wells-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px 20px;
-
-            padding-bottom: 65px;
-        }
-
-        .well-card {
-            min-height: 192px;
-
-            background: linear-gradient(
-                145deg,
-                #253345,
-                #1d2a39
-            );
-
-            border: 1px solid rgba(255,255,255,.07);
-            border-radius: 10px;
-
-            padding: 14px 15px;
-
-            box-shadow:
-                0 12px 20px rgba(0,0,0,.28),
-                inset 0 1px rgba(255,255,255,.025);
-
-            transition:
-                transform .2s,
-                border-color .2s,
-                box-shadow .2s;
-        }
-
-        .well-card:hover {
-            transform: translateY(-4px);
-
-            border-color: rgba(224,193,119,.42);
-
-            box-shadow:
-                0 16px 25px rgba(0,0,0,.36),
-                0 0 20px rgba(219,185,105,.06);
-        }
-
-        .well-card.active {
-            border: 2px solid #d9bd78;
-            padding: 13px 14px;
-
-            box-shadow:
-                0 0 20px rgba(224,193,119,.12),
-                0 15px 25px rgba(0,0,0,.32);
-        }
-
-        .well-title {
-            color: #e7d3a2;
-
-            font-family: "Playfair Display", Georgia, serif;
-
-            font-size: 21px;
-            font-weight: 700;
-
-            display: flex;
-            align-items: center;
-            gap: 7px;
-
-            padding-bottom: 9px;
-
-            border-bottom: 1px solid rgba(255,255,255,.07);
-        }
-
-        .pin {
-            color: #e5c46e;
-            font-size: 19px;
-        }
-
-        .coordinates {
-            margin-top: 10px;
-            margin-bottom: 15px;
-
-            color: #f0f0ef;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .coordinates span {
-            display: block;
-            color: #f3f3f3;
-        }
-
+        .wells-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding-bottom: 50px; }
+        .well-card { background: #1d2a39; border: 1px solid rgba(255,255,255,.07); border-radius: 10px; padding: 16px; }
+        .well-title { color: #e7d3a2; font-family: "Playfair Display", Georgia, serif; font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+        .coordinates { margin-bottom: 15px; color: #f0f0ef; font-size: 14px; }
         .maps-button {
-            width: 100%;
-            min-height: 61px;
-
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 9px;
-
-            text-decoration: none;
-
-            color: #e6d8b7;
-
-            background: linear-gradient(
-                180deg,
-                #155e91,
-                #0c4e7c
-            );
-
-            border: 1px solid #267bb2;
-            border-radius: 7px;
-
-            font-size: 14px;
-            font-weight: 600;
-
-            text-align: center;
-
-            box-shadow:
-                inset 0 1px rgba(255,255,255,.07),
-                0 3px 5px rgba(0,0,0,.25);
-
-            transition: .2s;
+            width: 100%; height: 45px; display: flex; justify-content: center; align-items: center; gap: 8px;
+            text-decoration: none; color: #ffffff; background: #155e91; border: 1px solid #267bb2; border-radius: 7px; font-size: 14px; font-weight: 600;
         }
-
-        .maps-button:hover {
-            background: linear-gradient(
-                180deg,
-                #1970a9,
-                #0d598b
-            );
-
-            transform: translateY(-1px);
-        }
-
-        .maps-icon {
-            font-size: 24px;
-            color: #e7d49b;
-        }
-
-        /* Empty */
-        .empty {
-            grid-column: 1 / -1;
-
-            text-align: center;
-
-            padding: 50px;
-
-            background: rgba(30,43,59,.8);
-            border-radius: 10px;
-
-            color: #c8ced5;
-        }
-
-        /* Footer */
-        footer {
-            height: 52px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: rgba(18,28,42,.94);
-
-            border-top: 1px solid rgba(255,255,255,.06);
-
-            color: #f1f1f1;
-
-            font-size: 14px;
-
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Responsive */
-        @media (max-width: 850px) {
-            .wells-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .hero-title {
-                font-size: 32px;
-            }
-
-            .hero-subtitle {
-                font-size: 18px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .topbar {
-                justify-content: center;
-                gap: 12px;
-                padding: 0 10px;
-            }
-
-            .nav-link {
-                font-size: 11px;
-            }
-
-            .logo {
-                transform: scale(.85);
-                margin-bottom: -20px;
-            }
-
-            .hero-title {
-                font-size: 27px;
-            }
-
-            .hero-subtitle {
-                font-size: 16px;
-                padding: 0 10px;
-            }
-
-            .search-box {
-                margin-top: 30px;
-            }
-
-            .search-title {
-                font-size: 26px;
-            }
-
-            .wells-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
-
-            .well-card {
-                min-height: auto;
-            }
-
-            .search-button {
-                padding: 0 13px;
-            }
-        }
+        .empty { grid-column: 1 / -1; text-align: center; padding: 40px; background: rgba(30,43,59,.8); border-radius: 10px; }
     </style>
 </head>
-
 <body>
 
-    <!-- TOP NAVIGATION -->
     <nav class="topbar">
-
-        <a href="/" class="nav-link">
-            <span class="nav-icon">◉</span>
-            Live Status
-        </a>
-
-        <a href="#map" class="nav-link">
-            <span class="nav-icon">🗺</span>
-            Map View
-        </a>
-
-        <a href="/admin" class="nav-link">
-            <span class="nav-icon">♟</span>
-            Admin
-        </a>
-
+        <a href="/" class="nav-link"><span class="nav-icon">◉</span> Live Status</a>
+        <a href="/" class="nav-link"><span class="nav-icon">🗺</span> Map View</a>
+        <a href="{{ url_for('login') }}" class="nav-link"><span class="nav-icon">♟</span> Admin Girişi</a>
     </nav>
 
-
     <main class="container">
-
-        <!-- LOGO / HEADER -->
         <section class="hero">
-
-            <div class="logo">
-
-                <div class="logo-oil"></div>
-                <div class="logo-red"></div>
-                <div class="logo-green"></div>
-
-                <div class="rig">
-                    <div class="rig-line rig-main"></div>
-                    <div class="rig-line rig-base-left"></div>
-                    <div class="rig-line rig-base-right"></div>
-                    <div class="rig-line rig-cross-1"></div>
-                    <div class="rig-line rig-cross-2"></div>
-                    <div class="rig-line rig-cross-3"></div>
-                    <div class="rig-line rig-cross-4"></div>
-                </div>
-
-            </div>
-
-            <h1 class="hero-title">
-                AZGERNEEFT MMC
-            </h1>
-
-            <p class="hero-subtitle">
-                Quyu Koordinat və Naviqasiya Sistemi
-            </p>
-
+            <h1 class="hero-title">AZGERNEFT MMC</h1>
+            <p class="hero-subtitle">Quyu Koordinat və Naviqasiya Sistemi</p>
         </section>
 
-
-        <!-- SEARCH -->
         <section class="search-box">
-
-            <h2 class="search-title">
-                Quyu Naviqasiyası
-            </h2>
-
+            <h2 class="search-title">Quyu Naviqasiyası</h2>
             <form class="search-form" method="GET" action="/">
-
-                <input
-                    class="search-input"
-                    type="text"
-                    name="search"
-                    placeholder="Quyu nömrəsini daxil edin..."
-                    value="{{ search }}"
-                    autocomplete="off"
-                >
-
-                <button class="search-button" type="submit">
-                    🔍 &nbsp; Axtar
-                </button>
-
+                <input class="search-input" type="text" name="search" placeholder="Quyu nömrəsini daxil edin..." value="{{ search }}">
+                <button class="search-button" type="submit">🔍 Axtar</button>
             </form>
-
         </section>
 
-
-        <!-- WELLS -->
         <section class="wells-grid">
-
             {% if wells %}
-
                 {% for well in wells %}
-
-                    <article
-                        class="well-card {% if well.number == 1 %}active{% endif %}"
-                    >
-
-                        <h3 class="well-title">
-                            <span class="pin">📍</span>
-                            {{ well.name }}
-                        </h3>
-
+                    <article class="well-card">
+                        <h3 class="well-title">📍 Quyu №{{ well.quyu_no }}</h3>
                         <div class="coordinates">
-                            <span>
-                                Koordinatlar: {{ well.coordinate }}
-                            </span>
+                            Koordinatlar: <strong>{{ well.lat }}, {{ well.lon }}</strong>
+                            {% if well.qeyd %}<br><small style="color:#dfc27c;">{{ well.qeyd }}</small>{% endif %}
                         </div>
-
-                        <a
-                            class="maps-button"
-                            href="https://www.google.com/maps/dir/?api=1&destination={{ well.lat }},{{ well.lng }}"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <span class="maps-icon">🗺</span>
-
-                            <span>
-                                Google Maps-da<br>
-                                Naviqasiyanı Aç
-                            </span>
+                        <a class="maps-button" href="https://www.google.com/maps?q={{ well.lat }},{{ well.lon }}" target="_blank">
+                            🗺 Google Maps-də Naviqasiyanı Aç
                         </a>
-
                     </article>
-
                 {% endfor %}
-
             {% else %}
-
                 <div class="empty">
                     <h3>Quyu tapılmadı</h3>
-                    <p style="margin-top:8px;">
-                        Axtardığınız quyu nömrəsini yenidən yoxlayın.
-                    </p>
+                    <p style="margin-top:8px;">Axtarışa uyğun quyu yoxdur və ya bazaya quyu əlavə olunmayıb.</p>
                 </div>
-
             {% endif %}
-
         </section>
-
     </main>
-
-
-    <footer>
-        Footer
-    </footer>
 
 </body>
 </html>
