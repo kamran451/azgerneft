@@ -3,76 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Azgerneft Quyu Axtarışı</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Quyu Naviqasiyası - Azgerneft</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #eef2f5; margin: 0; padding: 20px; text-align: center; }
+        .box { max-width: 450px; margin: auto; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        input[type="text"] { width: 80%; padding: 12px; font-size: 16px; border: 2px solid #007bff; border-radius: 8px; margin-bottom: 10px; }
+        .btn { padding: 12px 20px; font-size: 16px; border: none; border-radius: 8px; cursor: pointer; text-decoration: none; display: inline-block; font-weight: bold; }
+        .btn-blue { background: #007bff; color: white; width: 85%; }
+        .btn-green { background: #28a745; color: white; width: 100%; margin-top: 10px; }
+        .result-card { background: #f8f9fa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-top: 15px; text-align: left; }
+        .admin-link { display: block; margin-top: 20px; color: #6c757d; font-size: 14px; text-decoration: none; }
+    </style>
 </head>
-<body class="bg-light">
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h3>🛢️ Azgerneft Quyu Axtarışı</h3>
-        {% if is_admin %}
-            <a href="/logout" class="btn btn-outline-danger btn-sm">Admin Çıxış</a>
-        {% else %}
-            <a href="/login" class="btn btn-outline-secondary btn-sm">Admin Girişi</a>
+<body>
+    <div class="box">
+        <h2>🛢️ Azgerneft Quyu Axtarışı</h2>
+        <form method="GET" action="/">
+            <input type="text" name="query" value="{{ query }}" placeholder="Quyu nömrəsini daxil edin..." required>
+            <br>
+            <button type="submit" class="btn btn-blue">🔍 Axtar</button>
+        </form>
+
+        {% if mesaj %}
+            <p style="color: red; margin-top: 15px;">{{ mesaj }}</p>
         {% endif %}
-    </div>
-    
-    <div class="input-group input-group-lg mb-4">
-        <input type="text" id="searchInput" class="form-control" placeholder="Quyu nömrəsini daxil edin (məs: 71mm)..." onkeyup="quyuAxtar()">
-    </div>
 
-    <div id="neticeler"></div>
+        {% if quyular %}
+            {% for quyu in quyular %}
+            <div class="result-card">
+                <h3>📍 Quyu №: {{ quyu.quyu_no }}</h3>
+                <p><strong>Koordinatlar:</strong> {{ quyu.lat }}, {{ quyu.lon }}</p>
+                {% if quyu.qeyd %}
+                    <p><strong>Qeyd:</strong> {{ quyu.qeyd }}</p>
+                {% endif %}
+                <a href="https://www.google.com/maps/search/?api=1&query={{ quyu.lat }},{{ quyu.lon }}" target="_blank" class="btn btn-green">🗺️ Google Maps-də Naviqasiyanı Aç</a>
+            </div>
+            {% endfor %}
+        {% endif %}
 
-    {% if is_admin %}
-    <div class="text-center mt-4">
-        <a href="/elave-et" class="btn btn-success btn-lg w-100">➕ Yeni Quyu / GPS Qeydə Al</a>
+        <a href="/login" class="admin-link">⚙️ Admin Girişi</a>
     </div>
-    {% endif %}
-</div>
-
-<script>
-function quyuAxtar() {
-    let q = document.getElementById('searchInput').value;
-    if(q.length < 1) {
-        document.getElementById('neticeler').innerHTML = "";
-        return;
-    }
-    fetch('/ara?q=' + q)
-    .then(response => response.json())
-    .then(data => {
-        let html = "";
-        if(data.length === 0) {
-            html = `<div class="alert alert-warning text-center">Bu nömrəli quyu tapılmadı.</div>`;
-        } else {
-            data.forEach(item => {
-                let naviqasiyaUrl = `https://www.google.com/maps/dir/?api=1&destination=${item[5]},${item[6]}&travelmode=driving`;
-                
-                html += `
-                <div class="card shadow-sm mb-3">
-                    ${item[10] ? `<img src="/static/uploads/${item[10]}" class="card-img-top" style="max-height: 220px; object-fit: cover;">` : ''}
-                    <div class="card-body">
-                        <h4 class="card-title text-primary">Quyu №: ${item[1]}</h4>
-                        <p class="mb-1"><strong>Mədən:</strong> ${item[2]} | <strong>Sahə:</strong> ${item[3]}</p>
-                        <p class="mb-1"><strong>Dəqiq Ərazi:</strong> ${item[4]}</p>
-                        <p class="mb-2"><strong>Məlumat:</strong> ${item[7]}</p>
-                        
-                        ${item[5] && item[6] ? `
-                        <div class="d-grid mb-3">
-                            <a href="${naviqasiyaUrl}" target="_blank" class="btn btn-danger btn-lg fw-bold">
-                                🚗 YOL ÇƏK VƏ NAVİQASİYANI BAŞLAT
-                            </a>
-                        </div>` : ''}
-                        
-                        <hr class="my-2">
-                        <p class="mb-1"><strong>Cavabdeh Şəxs:</strong> ${item[8]}</p>
-                        <p class="mb-0"><strong>Əlaqə:</strong> <a href="tel:${item[9]}" class="btn btn-sm btn-outline-success">📞 ${item[9]}</a></p>
-                    </div>
-                </div>`;
-            });
-        }
-        document.getElementById('neticeler').innerHTML = html;
-    });
-}
-</script>
 </body>
 </html>
