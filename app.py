@@ -3,7 +3,10 @@ import sqlite3
 from flask import Flask, render_template, request, redirect, url_for, session
 
 app = Flask(__name__)
-app.secret_key = 'azgerneft_gizli_sifre'
+app.secret_key = 'azgerneft_xususi_gizli_acar_2026'
+
+# Yeni Admin Şifrəsi
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', '5847039k')
 
 def get_db():
     conn = sqlite3.connect('database.db')
@@ -29,24 +32,21 @@ init_db()
 @app.route('/')
 def index():
     query = request.args.get('query', '').strip()
-    quyular = []
-    mesaj = None
-    
+    conn = get_db()
     if query:
-        conn = get_db()
-        # DƏQİQLƏŞDİRİLMİŞ AXTARIŞ: İçində yazılan rəqəm/mətn keçən bütün quyuları tapır
-        quyular = conn.execute('SELECT * FROM quyular WHERE quyu_no LIKE ?', (f'%{query}%',)).fetchall()
-        conn.close()
-        if not quyular:
-            mesaj = f"'{query}' nömrəli quyu tapılmadı."
+        quyular = conn.execute('SELECT * FROM quyular WHERE quyu_no LIKE ? ORDER BY quyu_no ASC', (f'%{query}%',)).fetchall()
+    else:
+        # Ana səhifə açılan kimi BÜTÜN QUYULAR gəlir
+        quyular = conn.execute('SELECT * FROM quyular ORDER BY quyu_no ASC').fetchall()
+    conn.close()
             
-    return render_template('index.html', quyular=quyular, query=query, mesaj=mesaj)
+    return render_template('index.html', quyular=quyular, query=query)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         password = request.form.get('password')
-        if password == '5847039k':
+        if password == ADMIN_PASSWORD:
             session['admin'] = True
             return redirect(url_for('admin'))
         else:
